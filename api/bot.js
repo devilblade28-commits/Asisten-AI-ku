@@ -1,3 +1,11 @@
+// Tambahkan baris ini di paling atas agar Vercel mau menunggu hingga 60 detik
+export const maxDuration = 60;
+
+export default async function handler(req, res) {
+    // === 1. SURAT IZIN CORS ===
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    // ... (lanjutan kode Anda yang menggunakan gemini-3.1-pro-preview tetap sama persis) ...
+
 export default async function handler(req, res) {
     // === 1. SURAT IZIN CORS (Wajib agar Acode tidak diblokir) ===
     res.setHeader('Access-Control-Allow-Origin', '*');
