@@ -24,7 +24,7 @@ export default async function handler(req, res) {
 
     try {
         // === 4. MENGHUBUNGI GOOGLE AI STUDIO (GEMINI 1.5 FLASH) ===
-        // Kita menggunakan model 'gemini-3.1-pro' yang sangat cepat dan pintar
+        // Kita menggunakan model 'gemini-3.1-pro-preview' yang sangat cepat dan pintar
         const urlGemini = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-pro-preview:generateContent?key=${apiKey}`;
 
         const responAI = await fetch(urlGemini, {
