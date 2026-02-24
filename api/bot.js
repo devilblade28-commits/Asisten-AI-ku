@@ -17,7 +17,7 @@ export default async function handler(req, res) {
 
     try {
         // 3. Menghubungi Google AI
-        const urlGemini = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-pro-preview:generateContent?key=${apiKey}`;
+        const urlGemini = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
 
         const responAI = await fetch(urlGemini, {
             method: 'POST',
