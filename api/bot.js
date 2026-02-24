@@ -10,7 +10,7 @@ export default async function handler(req, res) {
     if (req.method !== 'POST') return res.status(405).json({ jawaban: 'Hanya menerima POST' });
 
     // 2. Ambil Kunci Rahasia
-    const apiKey = process.env.KUNCI_API_RAHASIA;
+    const apiKey = process.env.KUNCI_RAHASIA_AI;
     const pertanyaanUser = req.body.pertanyaan;
 
     if (!apiKey) return res.status(500).json({ jawaban: 'Error: Kunci rahasia belum terpasang di Vercel!' });
