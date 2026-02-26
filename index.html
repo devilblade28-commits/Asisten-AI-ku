@@ -4,28 +4,174 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Asisten AI Pribadi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        /* === DESAIN TAMPILAN (CSS) === */
+        body {
+            background-color: #1a1a1a; /* Warna latar gelap khas mode malam */
+            color: #ffffff;
+            font-family: 'Outfit', sans-serif;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin-top: 15vh; /* Menurunkan konten agar berada di tengah atas */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 3rem;
+            font-weight: 500;
+            margin-bottom: 30px;
+            letter-spacing: 1px;
+        }
+
+        /* Desain kotak pencarian berbentuk kapsul */
+        .search-box {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            background-color: transparent;
+            border: 1.5px solid #555;
+            border-radius: 50px; /* Membuat ujungnya sangat melengkung */
+            padding: 5px 15px 5px 20px;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        /* Efek saat kolom pencarian diklik */
+        .search-box:focus-within {
+            border-color: #aaa;
+            background-color: #222;
+        }
+
+        .icon-google {
+            font-size: 1.2rem;
+            margin-right: 10px;
+        }
+
+        input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 1rem;
+            font-family: 'Outfit', sans-serif;
+            padding: 12px 0;
+            outline: none;
+        }
+
+        input::placeholder {
+            color: #888;
+        }
+
+        button {
+            background: transparent;
+            border: none;
+            color: #aaa;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 50%;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        button:hover {
+            color: #fff;
+            background-color: #333;
+        }
+
+        /* Desain kotak balasan AI */
+        #hasil-container {
+            width: 100%;
+            margin-top: 30px;
+            background-color: #252525;
+            border-radius: 20px;
+            padding: 20px;
+            box-sizing: border-box;
+            display: none; /* Disembunyikan sebelum ada balasan */
+            line-height: 1.6;
+            font-size: 0.95rem;
+            color: #e0e0e0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+    </style>
 </head>
 <body>
-    <h1>Tanya Asisten AI</h1>
-    <input type="text" id="kolomTanya" placeholder="Ketik pertanyaan...">
-    <button id="tombolKirim">Kirim</button>
-    <p id="hasil" style="color: green;"></p>
+
+    <div class="container">
+        <div class="logo">Asisten AI</div>
+
+        <div class="search-box">
+            <span class="icon-google">✨</span>
+            <input type="text" id="kolomTanya" placeholder="Ketik pertanyaan... (misal: cara buat animasi TON 618)" autocomplete="off">
+            <button id="tombolKirim" title="Kirim">🚀</button>
+        </div>
+
+        <div id="hasil-container">
+            <div id="hasil"></div>
+        </div>
+    </div>
 
     <script>
-        document.getElementById('tombolKirim').addEventListener('click', async () => {
-            const teks = document.getElementById('kolomTanya').value;
-            document.getElementById('hasil').innerText = "Loading...";
+        const tombolKirim = document.getElementById('tombolKirim');
+        const kolomTanya = document.getElementById('kolomTanya');
+        const hasilContainer = document.getElementById('hasil-container');
+        const hasilTeks = document.getElementById('hasil');
 
-            // Menghubungi backend Vercel yang ada di folder 'api'
-            const respon = await fetch('/api/bot', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ pertanyaan: teks })
-            });
+        // Fungsi untuk mengirim pesan
+        async function kirimPesan() {
+            const teks = kolomTanya.value.trim();
+            if (!teks) return; // Jangan kirim kalau kosong
 
-            const data = await respon.json();
-            document.getElementById('hasil').innerText = data.jawaban;
+            // Munculkan kotak loading
+            hasilContainer.style.display = 'block';
+            hasilTeks.innerHTML = '<span style="color: #888;">Sedang berpikir...</span>';
+
+            try {
+                // Menghubungi API Vercel Anda (Pastikan link ini sesuai dengan URL Anda)
+                // Jika file ini diupload ke Vercel yang sama dengan foldr api/, cukup gunakan '/api/bot'
+                const respon = await fetch('/api/bot', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ pertanyaan: teks })
+                });
+
+                const data = await respon.json();
+                
+                // Ubah format baris baru dari AI menjadi <br> agar rapi di HTML
+                let balasanRapi = data.jawaban.replace(/\n/g, '<br>');
+                hasilTeks.innerHTML = balasanRapi;
+
+            } catch (error) {
+                hasilTeks.innerHTML = '<span style="color: #ff5555;">Gagal terhubung ke server.</span>';
+            }
+        }
+
+        // Jalankan saat tombol ditekan
+        tombolKirim.addEventListener('click', kirimPesan);
+
+        // Jalankan juga saat tombol Enter di keyboard HP ditekan
+        kolomTanya.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                kirimPesan();
+            }
         });
     </script>
+
 </body>
 </html>
