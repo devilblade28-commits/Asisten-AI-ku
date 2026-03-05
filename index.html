@@ -3,182 +3,238 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Asisten AI Pribadi</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
-    
+    <title>Funixx AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        /* === DESAIN TAMPILAN (CSS) === */
+        /* 1. Latar Belakang Abu-abu Dark Mode & Penyesuaian HP */
         body {
-            background-color: #1a1a1a; /* Warna latar gelap khas mode malam */
+            background-color: #1e1e1e; /* Abu-abu gelap (Dark Mode) */
             color: #ffffff;
             font-family: 'Outfit', sans-serif;
             margin: 0;
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-            box-sizing: border-box;
+            justify-content: center; /* Posisi di tengah jika dibuka di Laptop/PC */
+            height: 100vh;
+            overflow: hidden;
         }
 
-        .container {
+        /* Pembungkus agar seukuran layar HP */
+        .app-container {
             width: 100%;
-            max-width: 600px;
-            margin-top: 15vh; /* Menurunkan konten agar berada di tengah atas */
+            max-width: 450px; 
+            background-color: #1a1a1a; /* Sedikit berbeda agar terlihat batasnya di PC */
+            height: 100vh;
             display: flex;
             flex-direction: column;
-            align-items: center;
+            position: relative;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
         }
 
-        .logo {
-            font-size: 3rem;
-            font-weight: 500;
-            margin-bottom: 30px;
+        /* 2. Sapaan Awal & Logo */
+        #welcome-screen {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            width: 100%;
+            /* Efek transisi untuk otomatis menghilang */
+            transition: opacity 0.4s ease, visibility 0.4s;
+            z-index: 10;
+        }
+
+        .logo-icon {
+            font-size: 3.5rem;
+            /* Perpaduan Hitam dan Ungu */
+            background: linear-gradient(135deg, #222222, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 5px;
+            display: inline-block;
+        }
+
+        .brand-name {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #ffffff; /* Putih bersih */
             letter-spacing: 1px;
         }
 
-        /* Desain kotak pencarian berbentuk kapsul */
-        .search-box {
+        /* Area Riwayat Obrolan Tengah */
+        .chat-box {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding-bottom: 100px; /* Ruang agar tidak tertutup bar input */
+            z-index: 1;
+        }
+
+        /* 3. Aturan Visual Pesan */
+        .msg-row {
+            display: flex;
+            width: 100%;
+        }
+
+        /* Pengunjung (Kanan, Bubble Ungu, Teks Putih) */
+        .msg-user {
+            justify-content: flex-end;
+        }
+        .msg-user .bubble {
+            background-color: #8b5cf6; 
+            color: #ffffff;
+            padding: 12px 18px;
+            border-radius: 20px 20px 0 20px;
+            max-width: 80%;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            box-shadow: 0 4px 10px rgba(139, 92, 246, 0.2);
+        }
+
+        /* Funixx AI (Kiri, Tanpa Bubble, Menyatu Background) */
+        .msg-ai {
+            justify-content: flex-start;
+        }
+        .msg-ai .bubble {
+            background-color: transparent; 
+            color: #ffffff;
+            padding: 10px 0;
+            max-width: 90%;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* 4. Bar Input Kapsul Transparan di Bawah */
+        .input-container {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            background: linear-gradient(to top, #1a1a1a 80%, transparent);
+            z-index: 2;
+        }
+
+        .input-wrapper {
             display: flex;
             align-items: center;
-            width: 100%;
-            background-color: transparent;
-            border: 1.5px solid #555;
-            border-radius: 50px; /* Membuat ujungnya sangat melengkung */
-            padding: 5px 15px 5px 20px;
-            transition: all 0.3s ease;
-            box-sizing: border-box;
-        }
-
-        /* Efek saat kolom pencarian diklik */
-        .search-box:focus-within {
-            border-color: #aaa;
-            background-color: #222;
-        }
-
-        .icon-google {
-            font-size: 1.2rem;
-            margin-right: 10px;
+            background-color: rgba(255, 255, 255, 0.05); /* Transparan */
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50px; /* Bentuk Kapsul memanjang */
+            padding: 5px 15px;
+            backdrop-filter: blur(10px); /* Efek kaca (Glassmorphism) */
         }
 
         input {
             flex: 1;
             background: transparent;
             border: none;
-            color: white;
+            color: #ffffff;
             font-size: 1rem;
             font-family: 'Outfit', sans-serif;
-            padding: 12px 0;
+            padding: 12px 10px;
             outline: none;
         }
 
+        /* Teks placeholder putih transparan */
         input::placeholder {
-            color: #888;
+            color: rgba(255, 255, 255, 0.3); 
         }
 
         button {
             background: transparent;
             border: none;
-            color: #aaa;
+            color: #8b5cf6;
             font-size: 1.2rem;
             cursor: pointer;
             padding: 10px;
-            border-radius: 50%;
-            transition: 0.2s;
             display: flex;
             align-items: center;
             justify-content: center;
+            border-radius: 50%;
+            transition: 0.2s;
         }
 
         button:hover {
-            color: #fff;
-            background-color: #333;
-        }
-
-        /* Desain kotak balasan AI */
-        #hasil-container {
-            width: 100%;
-            margin-top: 30px;
-            background-color: #252525;
-            border-radius: 20px;
-            padding: 20px;
-            box-sizing: border-box;
-            display: none; /* Disembunyikan sebelum ada balasan */
-            line-height: 1.6;
-            font-size: 0.95rem;
-            color: #e0e0e0;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            background-color: rgba(139, 92, 246, 0.15);
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="logo">Asisten AI</div>
+    <div class="app-container">
         
-        <select id="modeAI" style="margin-bottom: 15px; padding: 5px 10px; border-radius: 10px; background: #222; color: white; border: 1px solid #555;">
-    <option value="instan">⚡ Mode Instan (Cepat & Singkat)</option>
-    <option value="thinking">🤔 Mode Thinking (Detail & Analitis)</option>
-</select>
-
-
-        <div class="search-box">
-            <span class="icon-google">✨</span>
-            <input type="text" id="kolomTanya" placeholder="Ketik pertanyaan... (misal: cara buat animasi TON 618)" autocomplete="off">
-            <button id="tombolKirim" title="Kirim">🚀</button>
+        <div id="welcome-screen">
+            <div class="logo-icon">✦</div> <div class="brand-name">Funixx AI</div>
         </div>
 
-        <div id="hasil-container">
-            <div id="hasil"></div>
+        <div class="chat-box" id="chatBox"></div>
+
+        <div class="input-container">
+            <div class="input-wrapper">
+                <input type="text" id="kolomTanya" placeholder="tanya Funixx AI" autocomplete="off">
+                <button id="tombolKirim">➤</button>
+            </div>
         </div>
+        
     </div>
 
     <script>
-        const tombolKirim = document.getElementById('tombolKirim');
+        const welcomeScreen = document.getElementById('welcome-screen');
+        const chatBox = document.getElementById('chatBox');
         const kolomTanya = document.getElementById('kolomTanya');
-        const hasilContainer = document.getElementById('hasil-container');
-        const hasilTeks = document.getElementById('hasil');
+        const tombolKirim = document.getElementById('tombolKirim');
 
-        // Fungsi untuk mengirim pesan
-        async function kirimPesan() {
-            const teks = kolomTanya.value.trim();
-            if (!teks) return; // Jangan kirim kalau kosong
-
-            // Munculkan kotak loading
-            hasilContainer.style.display = 'block';
-            hasilTeks.innerHTML = '<span style="color: #888;">Sedang berpikir...</span>';
-
-            try {
-// Ambil nilai dropdown yang dipilih user
-const modePilihan = document.getElementById('modeAI').value;
-
-const respon = await fetch('https://asisten-ai-ku.vercel.app/api/bot', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    // Kirimkan pertanyaaan DAN mode yang dipilih ke Vercel
-    body: JSON.stringify({ pertanyaan: teks, mode: modePilihan }) 
-});
-
-
-                const data = await respon.json();
-                
-                // Ubah format baris baru dari AI menjadi <br> agar rapi di HTML
-                let balasanRapi = data.jawaban.replace(/\n/g, '<br>');
-                hasilTeks.innerHTML = balasanRapi;
-
-            } catch (error) {
-                hasilTeks.innerHTML = '<span style="color: #ff5555;">Gagal terhubung ke server.</span>';
-            }
+        function tambahPesan(teks, pengirim) {
+            const row = document.createElement('div');
+            row.classList.add('msg-row', pengirim === 'user' ? 'msg-user' : 'msg-ai');
+            
+            const bubble = document.createElement('div');
+            bubble.classList.add('bubble');
+            bubble.innerHTML = teks;
+            
+            row.appendChild(bubble);
+            chatBox.appendChild(row);
+            
+            // Otomatis scroll ke bawah
+            chatBox.scrollTop = chatBox.scrollHeight;
         }
 
-        // Jalankan saat tombol ditekan
-        tombolKirim.addEventListener('click', kirimPesan);
+        tombolKirim.addEventListener('click', async () => {
+            const teks = kolomTanya.value.trim();
+            if (!teks) return;
 
-        // Jalankan juga saat tombol Enter di keyboard HP ditekan
-        kolomTanya.addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
-                kirimPesan();
+            // Efek sapaan otomatis menghilang saat mulai chat
+            welcomeScreen.style.opacity = '0';
+            setTimeout(() => welcomeScreen.style.visibility = 'hidden', 400);
+
+            // Tampilkan pesan pengunjung
+            tambahPesan(teks, 'user');
+            kolomTanya.value = '';
+
+            // Tampilkan loading AI
+            tambahPesan('<span style="color:#888;">Sedang berpikir...</span>', 'ai');
+            const elemenLoading = chatBox.lastChild.querySelector('.bubble');
+
+            try {
+                // Pastikan bot.js di Vercel menangkap data ini dengan baik
+                const respon = await fetch('/api/bot', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ pertanyaan: teks, mode: 'instan' }) 
+                });
+
+                const data = await respon.json();
+                elemenLoading.innerHTML = data.jawaban.replace(/\n/g, '<br>');
+            } catch (error) {
+                elemenLoading.innerHTML = '<span style="color: #ff5555;">Koneksi terputus. Coba lagi.</span>';
             }
+        });
+
+        kolomTanya.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') tombolKirim.click();
         });
     </script>
 
