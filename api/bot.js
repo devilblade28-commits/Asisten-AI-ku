@@ -24,12 +24,27 @@ export default async function handler(req, res) {
         return res.status(500).json({ jawaban: 'Error: Kunci rahasia belum terpasang di Vercel!' });
     }
 
-    // === 4. SIAPKAN KEPRIBADIAN (SYSTEM INSTRUCTION) ===
+        // === 3. AMBIL DATA DARI WEB ACODE ANDA ===
+    const apiKey = process.env.KUNCI_RAHASIA_AI;
+    const pertanyaanUser = req.body.pertanyaan;
+    const modeAI = req.body.mode; 
+    const aturanDariFirebase = req.body.aturanRahasia || ""; // Menangkap memori permanen
+
+    if (!apiKey) {
+        return res.status(500).json({ jawaban: 'Error: Kunci rahasia belum terpasang!' });
+    }
+
+    // === 4. SUNTIKKAN MEMORI KE OTAK AI (SYSTEM INSTRUCTION) ===
     let instruksiRahasia = "";
     if (modeAI === 'instan') {
-        instruksiRahasia = "Kamu adalah asisten super cepat. Jawablah langsung ke intinya, sangat singkat, padat, dan tidak lebih dari 3 kalimat. Hindari penjelasan panjang.";
+        instruksiRahasia = "Kamu adalah Funixx AI. Jawablah langsung ke intinya dan singkat.";
     } else {
-        instruksiRahasia = "Kamu adalah ahli logika dan programmer senior. Berpikirlah selangkah demi selangkah. Jelaskan alur pemikiranmu secara mendalam, rinci, dan terstruktur sebelum memberikan jawaban akhir.";
+        instruksiRahasia = "Kamu adalah ahli logika dan programmer senior. Berpikirlah secara detail dan mendalam.";
+    }
+
+    // GABUNGKAN INSTRUKSI DENGAN ATURAN PERMANEN USER
+    if (aturanDariFirebase !== "") {
+        instruksiRahasia += "\n\nPENTING! Ikuti aturan permanen dari pengguna berikut ini dengan ketat:\n" + aturanDariFirebase;
     }
 
     try {
