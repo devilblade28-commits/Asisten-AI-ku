@@ -6,148 +6,61 @@
     <title>Funixx AI</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        body {
-            background-color: #1e1e1e;
-            color: #ffffff;
-            font-family: 'Outfit', sans-serif;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            height: 100dvh; 
-            overflow: hidden;
-        }
-
-        .app-container {
-            width: 100%;
-            max-width: 450px; 
-            background-color: #1a1a1a;
-            height: 100dvh; 
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            box-shadow: 0 0 30px rgba(0,0,0,0.5);
-            overflow: hidden;
-        }
-
-        /* === 1. HEADER & MENU GARIS TIGA === */
-        .top-header {
-            position: absolute;
-            top: 0; left: 0; width: 100%;
-            padding: 15px 20px;
-            box-sizing: border-box;
-            z-index: 20; 
-            background-color: #1a1a1a;
-            border-bottom: 1px solid #333;
-            display: flex;
-            align-items: center;
-            gap: 15px; /* Jarak antara ikon menu dan teks FunixxAI */
-        }
-
-        .hamburger-icon {
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #fff;
-            user-select: none;
-        }
-
-        .model-selector {
-            display: inline-flex;
-            align-items: center;
-            cursor: pointer;
-            font-size: 1.1rem;
-            font-weight: 500;
-            color: #fff;
-            user-select: none;
-            position: relative;
-        }
-
+        body { background-color: #1e1e1e; color: #ffffff; font-family: 'Outfit', sans-serif; margin: 0; display: flex; justify-content: center; height: 100dvh; overflow: hidden; }
+        .app-container { width: 100%; max-width: 450px; background-color: #1a1a1a; height: 100dvh; display: flex; flex-direction: column; position: relative; box-shadow: 0 0 30px rgba(0,0,0,0.5); overflow: hidden; }
+        
+        /* HEADER & SIDEBAR */
+        .top-header { position: absolute; top: 0; left: 0; width: 100%; padding: 15px 20px; box-sizing: border-box; z-index: 20; background-color: #1a1a1a; border-bottom: 1px solid #333; display: flex; align-items: center; gap: 15px; }
+        .hamburger-icon { font-size: 1.5rem; cursor: pointer; color: #fff; user-select: none; }
+        .model-selector { display: inline-flex; align-items: center; cursor: pointer; font-size: 1.1rem; font-weight: 500; color: #fff; user-select: none; position: relative; }
         .dropdown-icon { font-size: 0.7rem; margin-left: 8px; color: #888; }
-
-        .dropdown-menu {
-            position: absolute; top: 35px; left: 0;
-            background-color: #252525; border: 1px solid #333;
-            border-radius: 12px; padding: 8px;
-            display: none; flex-direction: column;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.6); min-width: 160px;
-        }
+        .dropdown-menu { position: absolute; top: 35px; left: 0; background-color: #252525; border: 1px solid #333; border-radius: 12px; padding: 8px; display: none; flex-direction: column; box-shadow: 0 4px 20px rgba(0,0,0,0.6); min-width: 160px; }
         .dropdown-menu.show { display: flex; }
-
-        .dropdown-item {
-            padding: 12px 15px; border-radius: 8px; cursor: pointer;
-            font-size: 0.95rem; color: #ccc; transition: 0.2s;
-            display: flex; align-items: center; gap: 10px;
-        }
+        .dropdown-item { padding: 12px 15px; border-radius: 8px; cursor: pointer; font-size: 0.95rem; color: #ccc; transition: 0.2s; display: flex; align-items: center; gap: 10px; }
         .dropdown-item:hover, .dropdown-item.active { background-color: #333; color: #fff; }
-
-        /* === 2. SIDEBAR (LACI GESER PENGATURAN) === */
-        .sidebar-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100dvh;
-            background: rgba(0,0,0,0.5); z-index: 25;
-            display: none; opacity: 0; transition: opacity 0.3s;
-        }
+        
+        .sidebar-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100dvh; background: rgba(0,0,0,0.5); z-index: 25; display: none; opacity: 0; transition: opacity 0.3s; }
         .sidebar-overlay.show { display: block; opacity: 1; }
-
-        .sidebar {
-            position: absolute; top: 0; left: -280px; width: 260px; height: 100dvh;
-            background-color: #222; z-index: 30; transition: left 0.3s ease;
-            box-shadow: 2px 0 15px rgba(0,0,0,0.5); padding: 20px; box-sizing: border-box;
-        }
+        .sidebar { position: absolute; top: 0; left: -280px; width: 260px; height: 100dvh; background-color: #222; z-index: 30; transition: left 0.3s ease; box-shadow: 2px 0 15px rgba(0,0,0,0.5); padding: 20px; box-sizing: border-box; }
         .sidebar.open { left: 0; }
-
         .sidebar-title { font-size: 1.2rem; font-weight: 600; margin-bottom: 20px; border-bottom: 1px solid #444; padding-bottom: 10px; }
-        
-        /* Menu Akordeon */
-        .menu-item {
-            padding: 12px 10px; font-size: 1.05rem; cursor: pointer;
-            border-radius: 8px; transition: 0.2s; display: flex; justify-content: space-between;
-        }
+        .menu-item { padding: 12px 10px; font-size: 1.05rem; cursor: pointer; border-radius: 8px; transition: 0.2s; display: flex; justify-content: space-between; }
         .menu-item:hover { background-color: #333; }
-        
         .submenu { display: none; flex-direction: column; margin-left: 15px; border-left: 1px solid #444; padding-left: 10px; margin-top: 5px; }
         .submenu.show { display: flex; }
-        
-        .submenu-item {
-            padding: 10px; font-size: 0.95rem; color: #ccc; cursor: pointer; border-radius: 8px; transition: 0.2s;
-        }
+        .submenu-item { padding: 10px; font-size: 0.95rem; color: #ccc; cursor: pointer; border-radius: 8px; transition: 0.2s; }
         .submenu-item:hover { background-color: #333; color: #fff; }
 
-        /* === 3. MODAL MEMORI === */
-        .memory-modal {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100dvh;
-            background: rgba(0,0,0,0.8); z-index: 40; display: none;
-            justify-content: center; align-items: center; padding: 20px; box-sizing: border-box;
-        }
+        /* MODAL ATURAN PERMANEN ALA CHATGPT */
+        .memory-modal { position: absolute; top: 0; left: 0; width: 100%; height: 100dvh; background: rgba(0,0,0,0.85); z-index: 40; display: none; flex-direction: column; }
         .memory-modal.show { display: flex; }
-        
-        .memory-content {
-            background-color: #252525; width: 100%; max-height: 80vh;
-            border-radius: 15px; padding: 20px; box-sizing: border-box;
-            display: flex; flex-direction: column; border: 1px solid #444;
-        }
-        .memory-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #444; padding-bottom: 10px; }
-        .close-btn { background: transparent; color: #ff5555; border: none; font-size: 1.5rem; cursor: pointer; padding: 0; }
-        .memory-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
-        
-        .memory-card { background-color: #1a1a1a; padding: 12px; border-radius: 10px; border: 1px solid #333; font-size: 0.9rem; line-height: 1.4; color: #ddd; }
-        .memory-role { font-weight: 600; color: #8b5cf6; margin-bottom: 4px; font-size: 0.8rem; }
+        .memory-header { display: flex; align-items: center; padding: 20px; border-bottom: 1px solid #333; background-color: #1a1a1a; }
+        .back-btn { background: transparent; color: #fff; border: none; font-size: 1.5rem; cursor: pointer; margin-right: 15px; }
+        .memory-title { font-size: 1.2rem; font-weight: 500; flex: 1; text-align: center; margin-right: 30px; }
+        .memory-body { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 20px; }
+        .add-memory-box { display: flex; flex-direction: column; gap: 10px; background-color: #252525; padding: 15px; border-radius: 12px; border: 1px solid #333; }
+        .add-memory-box textarea { width: 100%; background: transparent; border: none; color: #fff; font-family: 'Outfit', sans-serif; font-size: 0.95rem; resize: none; outline: none; height: 60px; }
+        .add-memory-box textarea::placeholder { color: #888; }
+        .btn-add { align-self: flex-end; background-color: #fff; color: #000; border: none; padding: 8px 16px; border-radius: 20px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        .btn-add:hover { background-color: #ccc; }
+        .memory-list { display: flex; flex-direction: column; gap: 25px; margin-top: 10px; }
+        .memory-item { font-size: 0.95rem; line-height: 1.6; color: #e0e0e0; position: relative; padding-bottom: 15px; border-bottom: 1px solid #333; }
+        .btn-delete-all { background-color: transparent; color: #ff5555; border: 1px solid #ff5555; padding: 12px; border-radius: 25px; font-size: 1rem; font-weight: 500; text-align: center; cursor: pointer; margin-top: 20px; }
 
-        /* === SISA DESAIN CHAT === */
+        /* CHAT UI */
         #welcome-screen { position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); text-align: center; width: 100%; transition: opacity 0.4s ease, visibility 0.4s; z-index: 10; }
         .logo-img { width: 80px; height: auto; margin-bottom: 15px; border-radius: 50%; }
         .brand-name { font-size: 2rem; font-weight: 600; color: #ffffff; letter-spacing: 1px; }
-
         .chat-box { flex: 1; padding: 20px; padding-top: 75px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; z-index: 1; }
         .msg-row { display: flex; width: 100%; }
         .msg-user { justify-content: flex-end; }
         .msg-user .bubble { background-color: #8b5cf6; color: #ffffff; padding: 12px 18px; border-radius: 20px 20px 0 20px; max-width: 80%; font-size: 0.95rem; line-height: 1.5; }
         .msg-ai { justify-content: flex-start; }
         .msg-ai .bubble { background-color: transparent; color: #ffffff; padding: 10px 0; max-width: 90%; font-size: 0.95rem; line-height: 1.6; }
-
         .input-container { width: 100%; padding: 15px 20px 25px 20px; box-sizing: border-box; background: linear-gradient(to top, #1a1a1a 80%, transparent); z-index: 2; }
         .input-wrapper { display: flex; align-items: center; background-color: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 50px; padding: 5px 15px; backdrop-filter: blur(10px); }
         input { flex: 1; background: transparent; border: none; color: #ffffff; font-size: 1rem; font-family: 'Outfit', sans-serif; padding: 12px 10px; outline: none; }
-        input::placeholder { color: rgba(255, 255, 255, 0.3); }
-        button { background: transparent; border: none; color: #8b5cf6; font-size: 1.2rem; cursor: pointer; padding: 10px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: 0.2s; }
+        button.send-btn { background: transparent; border: none; color: #8b5cf6; font-size: 1.2rem; cursor: pointer; padding: 10px; }
     </style>
 </head>
 <body>
@@ -156,7 +69,6 @@
         
         <div class="top-header">
             <div class="hamburger-icon" id="btnMenu">☰</div>
-            
             <div class="model-selector" id="tombolDropdown">
                 <span id="teksModeTampil">FunixxAI</span>
                 <span class="dropdown-icon">▼</span>
@@ -170,25 +82,26 @@
         <div class="sidebar-overlay" id="sidebarOverlay"></div>
         <div class="sidebar" id="sidebarMenu">
             <div class="sidebar-title">Menu Utama</div>
-            
-            <div class="menu-item" id="btnPengaturan">
-                ⚙️ Pengaturan <span>▼</span>
-            </div>
+            <div class="menu-item" id="btnPengaturan">⚙️ Pengaturan <span>▼</span></div>
             <div class="submenu" id="submenuPengaturan">
-                <div class="submenu-item" id="btnMemori">🧠 Memori (Riwayat)</div>
-                <div class="submenu-item">🎨 Tema Visual</div>
+                <div class="submenu-item" id="btnBukaMemori">🧠 Memori Tersimpan</div>
             </div>
         </div>
 
         <div class="memory-modal" id="modalMemori">
-            <div class="memory-content">
-                <div class="memory-header">
-                    <h3 style="margin:0;">Riwayat Memori</h3>
-                    <button class="close-btn" id="tutupMemori">✖</button>
+            <div class="memory-header">
+                <button class="back-btn" id="tutupMemori">←</button>
+                <div class="memory-title">Memori tersimpan</div>
+            </div>
+            <div class="memory-body">
+                <div class="add-memory-box">
+                    <textarea id="inputMemoriBaru" placeholder="Ketik aturan permanen baru untuk AI..."></textarea>
+                    <button class="btn-add" id="btnTambahMemori">Simpan</button>
                 </div>
                 <div class="memory-list" id="daftarMemori">
-                    <p style="text-align:center; color:#888;">Memuat ingatan...</p>
+                    <p style="color:#888; text-align:center;">Belum ada memori permanen.</p>
                 </div>
+                <button class="btn-delete-all" id="btnHapusSemua">Hapus semua</button>
             </div>
         </div>
 
@@ -196,25 +109,20 @@
             <img src="logo.png" alt="Logo Funixx" class="logo-img">
             <div class="brand-name">Funixx AI</div>
         </div>
-
         <div class="chat-box" id="chatBox"></div>
-
         <div class="input-container">
             <div class="input-wrapper">
                 <input type="text" id="kolomTanya" placeholder="tanya Funixx AI" autocomplete="off">
-                <button id="tombolKirim">➤</button>
+                <button class="send-btn" id="tombolKirim">➤</button>
             </div>
         </div>
-        
     </div>
 
     <script type="module">
-        // === 1. KONFIGURASI FIREBASE ===
-        // Impor Firebase versi 9+ (Modular)
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, orderBy, query, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-        // !!! PENTING: Ganti kode di bawah ini dengan konfigurasi Firebase Anda sendiri !!!
+        // !!! GANTI DENGAN KODE FIREBASE ANDA !!!
         const firebaseConfig = {
             apiKey: "AIzaSyBc4uvTxYlelTWYEVcWeA75tnOFM2-R8jg",
             authDomain: "proyek-anda.firebaseapp.com",
@@ -223,61 +131,32 @@
             messagingSenderId: "123456789",
             appId: "1:123456789:web:abcdef"
         };
-
-        // Mengaktifkan Firebase & Database Firestore
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // === 2. LOGIKA UI (MENU, SIDEBAR, DROPDOWN) ===
-        const btnMenu = document.getElementById('btnMenu');
-        const sidebarMenu = document.getElementById('sidebarMenu');
-        const sidebarOverlay = document.getElementById('sidebarOverlay');
-        const btnPengaturan = document.getElementById('btnPengaturan');
-        const submenuPengaturan = document.getElementById('submenuPengaturan');
-        
-        // Buka/Tutup Sidebar
-        btnMenu.addEventListener('click', () => {
-            sidebarMenu.classList.add('open');
-            sidebarOverlay.classList.add('show');
-        });
-        sidebarOverlay.addEventListener('click', () => {
-            sidebarMenu.classList.remove('open');
-            sidebarOverlay.classList.remove('show');
-        });
+        // UI SIDEBAR
+        document.getElementById('btnMenu').addEventListener('click', () => { document.getElementById('sidebarMenu').classList.add('open'); document.getElementById('sidebarOverlay').classList.add('show'); });
+        document.getElementById('sidebarOverlay').addEventListener('click', () => { document.getElementById('sidebarMenu').classList.remove('open'); document.getElementById('sidebarOverlay').classList.remove('show'); });
+        document.getElementById('btnPengaturan').addEventListener('click', () => { document.getElementById('submenuPengaturan').classList.toggle('show'); });
 
-        // Buka/Tutup Submenu "Pengaturan"
-        btnPengaturan.addEventListener('click', () => {
-            submenuPengaturan.classList.toggle('show');
-        });
-
-        // Dropdown Model AI
-        const tombolDropdown = document.getElementById('tombolDropdown');
-        const menuDropdown = document.getElementById('menuDropdown');
-        const teksModeTampil = document.getElementById('teksModeTampil');
-        const pilihanItems = document.querySelectorAll('.dropdown-item');
+        // DROPDOWN
         let modeAktif = 'instan'; 
-
-        tombolDropdown.addEventListener('click', (e) => {
-            e.stopPropagation(); 
-            menuDropdown.classList.toggle('show');
-        });
-        document.addEventListener('click', () => { menuDropdown.classList.remove('show'); });
-
-        pilihanItems.forEach(item => {
+        document.getElementById('tombolDropdown').addEventListener('click', (e) => { e.stopPropagation(); document.getElementById('menuDropdown').classList.toggle('show'); });
+        document.addEventListener('click', () => { document.getElementById('menuDropdown').classList.remove('show'); });
+        document.querySelectorAll('.dropdown-item').forEach(item => {
             item.addEventListener('click', () => {
-                pilihanItems.forEach(i => i.classList.remove('active'));
+                document.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('active'));
                 item.classList.add('active');
                 modeAktif = item.getAttribute('data-mode');
-                teksModeTampil.innerText = (modeAktif === 'instan') ? 'FunixxAI Flash' : 'FunixxAI Thinking';
+                document.getElementById('teksModeTampil').innerText = (modeAktif === 'instan') ? 'FunixxAI Flash' : 'FunixxAI Thinking';
             });
         });
 
-        // === 3. LOGIKA CHAT & SIMPAN MEMORI KE FIREBASE ===
+        // ==========================================
+        // 1. FUNGSI LAYAR UTAMA (MENGEMBALIKAN RIWAYAT CHAT)
+        // ==========================================
         const chatBox = document.getElementById('chatBox');
-        const kolomTanya = document.getElementById('kolomTanya');
-        const tombolKirim = document.getElementById('tombolKirim');
-        const welcomeScreen = document.getElementById('welcome-screen');
-
+        
         function tambahPesan(teks, pengirim) {
             const row = document.createElement('div');
             row.classList.add('msg-row', pengirim === 'user' ? 'msg-user' : 'msg-ai');
@@ -289,136 +168,139 @@
             chatBox.scrollTop = chatBox.scrollHeight;
         }
 
-        // Fungsi menyimpan ke Firebase
-        async function simpanKeFirebase(pesan, pengirim) {
+        async function muatLayarUtama() {
             try {
+                // MENGAMBIL OBROLAN LAMA DARI FIREBASE (Agar tidak hilang saat direload)
+                const q = query(collection(db, "riwayat_chat"), orderBy("waktu", "asc"));
+                const querySnapshot = await getDocs(q);
+                
+                if (!querySnapshot.empty) {
+                    document.getElementById('welcome-screen').style.display = 'none';
+                    querySnapshot.forEach((doc) => {
+                        const data = doc.data();
+                        const isUser = (data.pengirim === 'Anda' || data.pengirim === 'user');
+                        tambahPesan(data.teks, isUser ? 'user' : 'ai');
+                    });
+                }
+            } catch (error) {
+                console.error("Gagal memuat riwayat obrolan:", error);
+            }
+        }
+        
+        // Panggil fungsi ini tepat setelah web dimuat
+        muatLayarUtama();
+
+        // ==========================================
+        // 2. SISTEM MEMORI ATURAN PERMANEN (MODAL)
+        // ==========================================
+        const modalMemori = document.getElementById('modalMemori');
+        const daftarMemori = document.getElementById('daftarMemori');
+        
+        document.getElementById('btnBukaMemori').addEventListener('click', () => {
+            document.getElementById('sidebarMenu').classList.remove('open'); document.getElementById('sidebarOverlay').classList.remove('show');
+            modalMemori.classList.add('show');
+            muatDaftarMemori();
+        });
+        document.getElementById('tutupMemori').addEventListener('click', () => { modalMemori.classList.remove('show'); });
+
+        async function muatDaftarMemori() {
+            daftarMemori.innerHTML = '<p style="color:#888;">Memuat...</p>';
+            const snapshot = await getDocs(query(collection(db, "aturan_permanen")));
+            daftarMemori.innerHTML = '';
+            if (snapshot.empty) { daftarMemori.innerHTML = '<p style="color:#888;">Belum ada memori permanen.</p>'; return; }
+            
+            snapshot.forEach((docSnap) => {
+                const data = docSnap.data();
+                const div = document.createElement('div');
+                div.classList.add('memory-item');
+                div.innerHTML = data.teks;
+                daftarMemori.appendChild(div);
+            });
+        }
+
+        document.getElementById('btnTambahMemori').addEventListener('click', async () => {
+            const inputTeks = document.getElementById('inputMemoriBaru').value.trim();
+            if(!inputTeks) return;
+            
+            document.getElementById('btnTambahMemori').innerText = "Menyimpan...";
+            await addDoc(collection(db, "aturan_permanen"), { teks: inputTeks });
+            document.getElementById('inputMemoriBaru').value = '';
+            document.getElementById('btnTambahMemori').innerText = "Simpan";
+            muatDaftarMemori();
+        });
+
+        document.getElementById('btnHapusSemua').addEventListener('click', async () => {
+            if(confirm("Yakin ingin menghapus semua ingatan AI ini?")) {
+                const snapshot = await getDocs(query(collection(db, "aturan_permanen")));
+                snapshot.forEach(async (docSnap) => {
+                    await deleteDoc(doc(db, "aturan_permanen", docSnap.id));
+                });
+                setTimeout(muatDaftarMemori, 1000); 
+            }
+        });
+
+        // ==========================================
+        // 3. LOGIKA KIRIM PESAN KE VERCEL
+        // ==========================================
+        const kolomTanya = document.getElementById('kolomTanya');
+
+        async function simpanChatKeFirebase(pesan, pengirim) {
+            try {
+                // Menyimpan teks obrolan agar besok bisa dimuat lagi
                 await addDoc(collection(db, "riwayat_chat"), {
                     teks: pesan,
                     pengirim: pengirim,
-                    waktu: serverTimestamp()
+                    waktu: Date.now()
                 });
             } catch (e) {
-                console.error("Gagal menyimpan memori: ", e);
+                console.error("Gagal menyimpan riwayat chat:", e);
             }
         }
 
-        tombolKirim.addEventListener('click', async () => {
+        document.getElementById('tombolKirim').addEventListener('click', async () => {
             const teks = kolomTanya.value.trim();
             if (!teks) return;
 
-            welcomeScreen.style.opacity = '0';
-            setTimeout(() => welcomeScreen.style.visibility = 'hidden', 400);
-
-            // Tampilkan & Simpan pesan User
+            document.getElementById('welcome-screen').style.display = 'none';
             tambahPesan(teks, 'user');
-            simpanKeFirebase(teks, 'Anda'); 
+            simpanChatKeFirebase(teks, 'user'); // Simpan pesan user
             kolomTanya.value = '';
 
             tambahPesan('<span style="color:#888;">Sedang berpikir...</span>', 'ai');
             const elemenLoading = chatBox.lastChild.querySelector('.bubble');
 
             try {
+                // 1. Kumpulkan semua aturan permanen dari memori
+                const memoriSnapshot = await getDocs(query(collection(db, "aturan_permanen")));
+                let teksMemoriGabungan = "";
+                memoriSnapshot.forEach((doc) => {
+                    teksMemoriGabungan += "- " + doc.data().teks + "\n";
+                });
+
+                // 2. Kirim ke Vercel
                 const respon = await fetch('https://asisten-ai-ku.vercel.app/api/bot', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ pertanyaan: teks, mode: modeAktif }) 
+                    body: JSON.stringify({ 
+                        pertanyaan: teks, 
+                        mode: modeAktif,
+                        aturanRahasia: teksMemoriGabungan 
+                    }) 
                 });
 
                 const data = await respon.json();
-                const balasanAI = data.jawaban.replace(/\n/g, '<br>');
-                elemenLoading.innerHTML = balasanAI;
+                const balasanRapi = data.jawaban.replace(/\n/g, '<br>');
+                elemenLoading.innerHTML = balasanRapi;
                 
-                // Simpan balasan AI ke Firebase
-                simpanKeFirebase(data.jawaban, 'Funixx AI');
+                // 3. Simpan balasan AI ke riwayat
+                simpanChatKeFirebase(balasanRapi, 'ai');
 
             } catch (error) {
                 elemenLoading.innerHTML = '<span style="color: #ff5555;">Koneksi terputus. Coba lagi.</span>';
             }
         });
 
-        kolomTanya.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') tombolKirim.click();
-        });
-
-        // === 4. LOGIKA MENAMPILKAN MEMORI DARI FIREBASE ===
-        const btnMemori = document.getElementById('btnMemori');
-        const modalMemori = document.getElementById('modalMemori');
-        const tutupMemori = document.getElementById('tutupMemori');
-        const daftarMemori = document.getElementById('daftarMemori');
-
-        btnMemori.addEventListener('click', async () => {
-            // Tutup sidebar, buka pop-up memori
-            sidebarMenu.classList.remove('open');
-            sidebarOverlay.classList.remove('show');
-            modalMemori.classList.add('show');
-            
-            daftarMemori.innerHTML = '<p style="text-align:center; color:#888;">Sedang mengambil memori dari awan...</p>';
-
-            try {
-                // Mengambil data dari Firestore, diurutkan dari yang paling lama ke baru
-                const q = query(collection(db, "riwayat_chat"), orderBy("waktu", "asc"));
-                const querySnapshot = await getDocs(q);
-                
-                daftarMemori.innerHTML = ''; // Kosongkan tulisan loading
-                
-                if (querySnapshot.empty) {
-                    daftarMemori.innerHTML = '<p style="text-align:center; color:#888;">Belum ada memori yang tersimpan.</p>';
-                    return;
-                }
-
-                querySnapshot.forEach((doc) => {
-                    const data = doc.data();
-                    const card = document.createElement('div');
-                    card.classList.add('memory-card');
-                    card.innerHTML = `
-                        <div class="memory-role">${data.pengirim}</div>
-                        <div>${data.teks}</div>
-                    `;
-                    daftarMemori.appendChild(card);
-                });
-                
-                // Otomatis scroll ke riwayat paling bawah (terbaru)
-                daftarMemori.scrollTop = daftarMemori.scrollHeight;
-
-            } catch (error) {
-                daftarMemori.innerHTML = `<p style="color:#ff5555; text-align:center;">Gagal memuat memori. Pastikan Konfigurasi Firebase Anda sudah benar.</p>`;
-                console.error(error);
-            }
-        });
-
-        tutupMemori.addEventListener('click', () => {
-            modalMemori.classList.remove('show');
-        });
-
-                // === 5. FUNGSI MEMUAT RIWAYAT KE LAYAR UTAMA SAAT APLIKASI DIBUKA ===
-        async function muatLayarUtama() {
-            try {
-                // Mengambil data dari Firebase
-                const q = query(collection(db, "riwayat_chat"), orderBy("waktu", "asc"));
-                const querySnapshot = await getDocs(q);
-                
-                // Jika ada riwayat chat sebelumnya
-                if (!querySnapshot.empty) {
-                    // Sembunyikan sapaan "Funixx AI" di tengah layar
-                    welcomeScreen.style.display = 'none'; 
-                    
-                    // Masukkan semua pesan satu per satu ke layar chat
-                    querySnapshot.forEach((doc) => {
-                        const data = doc.data();
-                        
-                        // Cek siapa yang mengirim (User atau AI)
-                        const isUser = (data.pengirim === 'Anda' || data.pengirim === 'user');
-                        tambahPesan(data.teks, isUser ? 'user' : 'ai');
-                    });
-                }
-            } catch (error) {
-                console.error("Gagal memuat riwayat obrolan di layar utama:", error);
-            }
-        }
-
-        // Jalankan fungsi ini secara otomatis setiap kali web dibuka/di-refresh
-        muatLayarUtama();
-
+        kolomTanya.addEventListener('keypress', (e) => { if (e.key === 'Enter') document.getElementById('tombolKirim').click(); });
     </script>
 </body>
 </html>
