@@ -389,6 +389,36 @@
         tutupMemori.addEventListener('click', () => {
             modalMemori.classList.remove('show');
         });
+
+        // === 5. FUNGSI MEMUAT RIWAYAT KE LAYAR UTAMA SAAT APLIKASI DIBUKA ===
+        async function muatLayarUtama() {
+            try {
+                // Mengambil data dari Firebase
+                const q = query(collection(db, "riwayat_chat"), orderBy("waktu", "asc"));
+                const querySnapshot = await getDocs(q);
+                
+                // Jika ada riwayat chat sebelumnya
+                if (!querySnapshot.empty) {
+                    // Sembunyikan sapaan "Funixx AI" di tengah layar
+                    welcomeScreen.style.display = 'none'; 
+                    
+                    // Masukkan semua pesan satu per satu ke layar chat
+                    querySnapshot.forEach((doc) => {
+                        const data = doc.data();
+                        
+                        // Cek siapa yang mengirim (User atau AI)
+                        const isUser = (data.pengirim === 'Anda' || data.pengirim === 'user');
+                        tambahPesan(data.teks, isUser ? 'user' : 'ai');
+                    });
+                }
+            } catch (error) {
+                console.error("Gagal memuat riwayat obrolan di layar utama:", error);
+            }
+        }
+
+        // Jalankan fungsi ini secara otomatis setiap kali web dibuka/di-refresh
+        muatLayarUtama();
+
     </script>
 </body>
 </html>
